@@ -1,138 +1,63 @@
-# Basic Backup Bot
+# basic-backup-bot
 
-Bot de backup e restore para servidores do Discord.
+Bot de backup e restore para Discord. Salva cargos, canais, categorias e permissões num SQLite local e recria tudo do zero quando precisar.
 
-Projeto focado em estabilidade.  
-Feito para aguentar restore pesado sem cair por rate-limit.
+## o que faz
 
----
+- salva toda a estrutura do servidor (cargos, canais, categorias, permissões)
+- restore destrutivo — deleta o que tem e recria pelo backup
+- nomes nos backups, sem ficar decorando ID
+- lock de restore (não deixa rodar dois ao mesmo tempo)
+- retry automático em rate limit 429
+- delay entre operações pra não tomar ban da API
+- log em tempo real no próprio Discord durante o restore
 
-## Features
-
-- Backup completo de:
-  - Cargos
-  - Canais
-  - Categorias
-  - Permissões
-- Restore destrutivo (recria estrutura inteira)
-- Sistema de lock (impede dois restores ao mesmo tempo)
-- Retry automático em erro 429
-- Delay inteligente anti rate-limit
-- Anti crash global
-- Log estruturado em `.txt`
-- Log em tempo real no Discord
-- Banco de dados SQLite local
-
----
-
-## Requisitos
+## requisitos
 
 - Node.js 18+
-- Bot com permissão de **Administrador**
-- Token do bot
-- ID do usuário que poderá usar os comandos
+- bot com permissão de Administrador no servidor
+- token do bot e seu ID de usuário
 
----
-
-## Instalação
-
-Clone o repositório:
+## instalação
 
 ```bash
 git clone https://github.com/seu-usuario/basic-backup-bot.git
 cd basic-backup-bot
-```
-
-Instale as dependências:
-
-```bash
 npm install
 ```
 
----
+crie o `.env` na raiz:
 
-## Configuração
-
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-TOKEN=SEU_TOKEN_AQUI
-OWNER_ID=SEU_ID_AQUI
+```
+TOKEN=seu_token_aqui
+OWNER_ID=seu_id_aqui
 ```
 
-- `TOKEN` → Token do bot do Discord  
-- `OWNER_ID` → ID da conta autorizada a usar os comandos  
-
----
-
-## Executando
+depois é só rodar:
 
 ```bash
 node index.js
 ```
 
-Se estiver tudo certo, o console mostrará que o bot está logado.
+## comandos
 
----
+| comando | descrição |
+|---|---|
+| `!backup <nome>` | cria um backup com o nome que você quiser |
+| `!restore <nome>` | restaura pelo nome |
+| `!listbackups` | lista todos os backups com data de criação |
 
-## Comandos
+## aviso
 
-Criar backup:
+o restore **deleta tudo** que tem no servidor antes de recriar. teste primeiro em servidor de teste, não direto no principal.
 
-```
-!backup
-```
-
-Restaurar backup:
-
-```
-!restore <id>
-```
-
-O ID é informado quando o backup é criado.
-
----
-
-## Logs
-
-Os logs ficam em:
-
-```
-/logs/bot.log
-```
-
-Tudo que o bot faz é registrado com timestamp.
-
----
-
-## Estrutura do projeto
+## estrutura
 
 ```
 basic-backup-bot/
-│
 ├── backups/
-├── logs/
 ├── database.sqlite
 ├── index.js
 ├── package.json
 └── .env
 ```
-
----
-
-## Aviso Importante
-
-O restore:
-
-- Deleta canais atuais
-- Deleta cargos atuais
-- Recria a estrutura salva
-
-Use com cuidado.  
-Teste primeiro em um servidor secundário.
-
----
-
-## Licença
-
-Uso livre para estudos e projetos pessoais.
